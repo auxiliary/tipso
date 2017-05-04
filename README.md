@@ -69,6 +69,7 @@ To use css3 animation effects please include [Animate.css](http://daneden.github
 | onBeforeShow        | function(){} | Function to be executed before tipso is shown                                                                                      |
 | onShow              | function(){} | Function to be executed after tipso is shown                                                                                       |
 | onHide              | function(){} | Function to be executed after tipso is hidden                                                                                      |
+| manageShowHide      | true         | Handle show hide events or only be controlled programmatically                                                                     |
 
 > Additionaly you can use `data-tipso` instead of the title attribute for the tooltip content ( set `useTitle: false` )
 

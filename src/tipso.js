@@ -46,7 +46,8 @@
       templateEngineFunc: null,         //A function that compiles and renders the content
       onBeforeShow      : null,
       onShow            : null,
-      onHide            : null
+      onHide            : null,
+      manageShowHide    : true
     };
 
   function Plugin(element, options) {
@@ -112,44 +113,47 @@
         $doc = this.doc;
       $e.addClass('tipso_style').removeAttr('title');
 
-      if (obj.settings.tooltipHover) {
-        var waitForHover = null,
-            hoverHelper = null;
-        $e.on('mouseover' + '.' + pluginName, function() {
-          clearTimeout(waitForHover);
-          clearTimeout(hoverHelper);
-          hoverHelper = setTimeout(function(){
-            obj.show();
-          }, 150);
-        });
-        $e.on('mouseout' + '.' + pluginName, function() {
-          clearTimeout(waitForHover);
-          clearTimeout(hoverHelper);
-          waitForHover = setTimeout(function(){
-            obj.hide();
-          }, 200);
-
-          obj.tooltip()
-            .on('mouseover' + '.' + pluginName, function() {
-              obj.mode = 'tooltipHover';
-            })
-            .on('mouseout' + '.' + pluginName, function() {
-              obj.mode = 'show';
+      if (obj.settings.manageShowHide) {
+          if (obj.settings.tooltipHover) {
+            var waitForHover = null,
+                hoverHelper = null;
+            $e.on('mouseover' + '.' + pluginName, function() {
               clearTimeout(waitForHover);
+              clearTimeout(hoverHelper);
+              hoverHelper = setTimeout(function(){
+                obj.show();
+              }, 150);
+            });
+            $e.on('mouseout' + '.' + pluginName, function() {
+              clearTimeout(waitForHover);
+              clearTimeout(hoverHelper);
               waitForHover = setTimeout(function(){
                 obj.hide();
               }, 200);
-            })
-        ;
-        });
-      } else {
-        $e.on('mouseover' + '.' + pluginName, function() {
-          obj.show();
-        });
-        $e.on('mouseout' + '.' + pluginName, function() {
-          obj.hide();
-        });
+
+              obj.tooltip()
+                .on('mouseover' + '.' + pluginName, function() {
+                  obj.mode = 'tooltipHover';
+                })
+                .on('mouseout' + '.' + pluginName, function() {
+                  obj.mode = 'show';
+                  clearTimeout(waitForHover);
+                  waitForHover = setTimeout(function(){
+                    obj.hide();
+                  }, 200);
+                })
+            ;
+            });
+          } else {
+            $e.on('mouseover' + '.' + pluginName, function() {
+              obj.show();
+            });
+            $e.on('mouseout' + '.' + pluginName, function() {
+              obj.hide();
+            });
+          }
       }
+
 	  if(obj.settings.ajaxContentUrl)
 	  {
 		obj.ajaxContent = null;
